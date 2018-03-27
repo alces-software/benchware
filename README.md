@@ -17,7 +17,7 @@ benchware -a -n node001
 ## List of Checks and Tests
 
 - CPU
-  - # Cores
+  - Number of Cores
   - Hyperthreading (enable/disable)
   - Model #
 - Memory
