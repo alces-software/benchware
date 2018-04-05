@@ -1,0 +1,4 @@
+module_name: localdisks
+commands:
+  free_space: 'test it'
+  write_speed: 'test it'

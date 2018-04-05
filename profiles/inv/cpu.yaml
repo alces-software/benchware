@@ -1,0 +1,5 @@
+module_name: cpu
+commands:
+  num_cores: "grep -c processor /proc/cpuinfo"
+  hyperthreading: ""
+  model: "grep -m 1 name /proc/cpuinfo |awk '{print $2}'"
