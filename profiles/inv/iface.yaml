@@ -1,7 +1,7 @@
 module_name: interface
 repeat_list: "ls /etc/sysconfig/network-scripts/ifcfg-* |sed 's/.*ifcfg-//g'"
 commands:
-  type: ""
+  type: "grep '^TYPE=' /etc/sysconfig/network-scripts/ifcfg-ENTRY |sed 's/TYPE=//g'"
   state: ""
   speed: ""
   mac: ""

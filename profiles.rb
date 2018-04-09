@@ -67,10 +67,10 @@ class Profiles
         details['commands'].each do |command_name, command_cli|
           if details.key?('repeat_list')
             run_list.each do |entry|
-              @results[node][module_name][entry][command_name] = command_cli.sub('ENTRY', entry)
+              @results[node][module_name][entry][command_name] = `ssh #{node} #{command_cli.sub('ENTRY', entry)}`
             end
           else
-            @results[node][module_name][command_name] = command_cli
+            @results[node][module_name][command_name] = `ssh #{node} #{command_cli}`
           end
         end
       end
