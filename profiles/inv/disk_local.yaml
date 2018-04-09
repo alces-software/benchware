@@ -1,4 +1,4 @@
 module_name: localdisks
+repeat_list: "lsscsi |grep disk |awk -F '[[:space:]][[:space:]]+ ' '{print $6}'"
 commands:
-  free_space: 'test it'
-  write_speed: 'test it'
+  size: "fdisk -l ENTRY |grep ^Disk -m 1 |awk '{print $3,$4}' |sed 's/,//g'"

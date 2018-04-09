@@ -1,0 +1,9 @@
+module_name: interface
+repeat_list: "ls /etc/sysconfig/network-scripts/ifcfg-* |sed 's/.*ifcfg-//g'"
+commands:
+  type: ""
+  state: ""
+  speed: ""
+  mac: ""
+  location: ""
+  slaves: ""

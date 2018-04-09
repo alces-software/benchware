@@ -1,5 +1,5 @@
 module_name: cpu
 commands:
-  num_cores: "grep -c processor /proc/cpuinfo"
-  hyperthreading: ""
   model: "grep -m 1 name /proc/cpuinfo |awk '{print $2}'"
+  num_cores: "grep -c processor /proc/cpuinfo"
+  hyperthreading: "[[ $(grep -m 1 'cpu cores' /proc/cpuinfo |awk '{print $4}') != $(grep -m 1 'siblings' /proc/cpuinfo |awk '{print $3}') ]] && echo 'enabled' || echo 'disabled'"

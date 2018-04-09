@@ -45,7 +45,7 @@ class Profiles
     # Configure module name dict w/ commands from files
     module_files.each do |infile|
       yaml_load = YAML.load_file(infile)
-      @jobs[yaml_load['module_name']] = yaml_load['commands']
+      @jobs[yaml_load['module_name']] = yaml_load.dup.tap { |h| h.delete('module_name') }
     end
 
     # Return
@@ -55,10 +55,23 @@ class Profiles
   def run_jobs()
     @nodes.each do |node|
       @results[node] = {}
-      @jobs.each do |module_name, commands|
+      @jobs.each do |module_name, details|
         @results[node][module_name] = {}
-        commands.each do |command_name, command_cli|
-          @results[node][module_name][command_name] = `${command_cli}`
+        if details['repeat_list']
+          run_list = `#{details['repeat_list']}`.split(/\n/)
+          run_list.each do |entry|
+            @results[node][module_name][entry] = {}
+          end
+        end
+
+        details['commands'].each do |command_name, command_cli|
+          if details.key?('repeat_list')
+            run_list.each do |entry|
+              @results[node][module_name][entry][command_name] = command_cli.sub('ENTRY', entry)
+            end
+          else
+            @results[node][module_name][command_name] = command_cli
+          end
         end
       end
     end

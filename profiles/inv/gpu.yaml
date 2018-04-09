@@ -1,0 +1,3 @@
+module_name: gpu
+commands:
+  command1: 'test it'
