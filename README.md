@@ -68,3 +68,13 @@ Data will be output in YAML by default but can also be set as CSV
   - HPL
   - DD Write Speed (for each disk)
 
+## Example Command Module
+
+```
+module_name: name_of_module
+repeat_list: "command to return newline separated list of items to run the commands on"
+commands:
+  command_name: "way of running test"
+```
+
+To use the entries in the `repeat_list` variable (`repeat_list` is optional) put all caps `ENTRY` in the command for it to be substituted at execution. 
