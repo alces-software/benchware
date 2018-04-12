@@ -31,6 +31,6 @@ require 'profiles'
 options = MainParser.parse(ARGV)
 
 # Run Command
-run_profile = Profiles.new(options['profile'], options['nodes'])
+run_profile = Profiles.new(options)
 run_profile.run_jobs()
-run_profile.results(options['output'], options['file'])
+run_profile.results()

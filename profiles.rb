@@ -26,9 +26,12 @@ require 'io/console'
 
 class Profiles
 
-  def initialize(profile, nodes)
-    @profile = profile
-    @nodes = nodes.split(' ')
+  def initialize(options)
+    @profile = options['profile']
+    @nodes = options['nodes'].split(' ')
+    @output = options['output']
+    @file = options['file']
+    @row_height = options['row_height']
     @jobs = {}
     @results = {}
     self.find_jobs()
@@ -94,31 +97,31 @@ class Profiles
   def _page_output(data)
     
     CLI::UI::StdoutRouter.enable
-    col_max = 30
+    row_max = @row_height
 
     data.each do |node, node_data|
       system('clear')
       puts node
-      col_num = 1
+      row_num = 1
       node_data.each do |module_name, module_commands|
         puts "  #{module_name}:"
         module_commands.each do |command, output|
           if output.class == Hash
             puts "    #{command}:"
-            col_num += 1
+            row_num += 1
             output.each do |entry, out|
               puts "      #{entry}: #{out}"
-              col_num += 1
+              row_num += 1
             end
           else
             puts "    #{command}: #{output}"
-            col_num += 1
+            row_num += 1
           end
-          if col_num >= col_max
+          if row_num >= row_max
             self._continue
             system('clear')
             puts node
-            col_num = 1
+            row_num = 1
           end
         end
       end
@@ -126,8 +129,8 @@ class Profiles
     end
   end
 
-  def results(format, outfile)
-    if format == 'csv'
+  def results()
+    if @format == 'csv'
       # TODO: actually write the csv output format
       puts "nodename,module_name,"
       @results.each do |node, module_name|
@@ -136,8 +139,8 @@ class Profiles
     else
       #puts @results.to_yaml
       self._page_output(@results)
-      if outfile
-        File.write(outfile, @results.to_yaml)
+      if @file
+        File.write(@file, @results.to_yaml)
       end
     end
   end

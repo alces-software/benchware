@@ -33,6 +33,7 @@ class MainParser
   options['output'] = 'yaml'
   options['profile'] = 'all'
   options['file'] = nil
+  options['row_height'] = 30
 
   opt_parser = OptionParser.new do |opt|
     opt.banner = "Usage: benchware [OPTIONS] -n \"NODES\""
@@ -58,6 +59,10 @@ class MainParser
 
     opt.on("-f","--file FILE","file to write command output to") do |filename|
       options['file'] = filename
+    end
+
+    opt.on("-l","--length LENGTH",Integer,"the height of the paged output") do |height|
+      options['row_height'] = height
     end
 
     opt.on("-h","--help","show this help screen") do
