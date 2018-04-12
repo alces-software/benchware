@@ -21,6 +21,8 @@
 #==============================================================================
 
 require 'yaml'
+require 'cli/ui'
+require 'io/console'
 
 class Profiles
 
@@ -84,6 +86,46 @@ class Profiles
     end
   end
 
+  def _continue
+    print "Press any key to continue"
+    STDIN.getch
+  end
+
+  def _page_output(data)
+    
+    CLI::UI::StdoutRouter.enable
+    col_max = 30
+
+    data.each do |node, node_data|
+      system('clear')
+      puts node
+      col_num = 1
+      node_data.each do |module_name, module_commands|
+        puts "  #{module_name}:"
+        module_commands.each do |command, output|
+          if output.class == Hash
+            puts "    #{command}:"
+            col_num += 1
+            output.each do |entry, out|
+              puts "      #{entry}: #{out}"
+              col_num += 1
+            end
+          else
+            puts "    #{command}: #{output}"
+            col_num += 1
+          end
+          if col_num >= col_max
+            self._continue
+            system('clear')
+            puts node
+            col_num = 1
+          end
+        end
+      end
+      self._continue
+    end
+  end
+
   def results(format, outfile)
     if format == 'csv'
       # TODO: actually write the csv output format
@@ -92,7 +134,8 @@ class Profiles
         puts "node,#{module_name},"
       end
     else
-      puts @results.to_yaml
+      #puts @results.to_yaml
+      self._page_output(@results)
       if outfile
         File.write(outfile, @results.to_yaml)
       end
