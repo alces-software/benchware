@@ -1,0 +1,4 @@
+module_name: disks
+repeat_list: "lsscsi |grep disk |awk -F '[[:space:]][[:space:]]+' '{print $6}'"
+commands:
+  size: "fdisk -l ENTRY |grep ^Disk -m 1 |awk '{print $3,$4}' |sed 's/,//g'"
