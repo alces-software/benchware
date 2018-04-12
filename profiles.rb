@@ -49,7 +49,18 @@ class Profiles
     end
 
     # Return
-    puts @jobs
+    #puts @jobs
+  end
+
+  def _sanitise_cmdline(command)
+    # Properly escape $
+    clean = command.gsub('$','\\$')
+    return clean
+  end
+
+  def _run_cmd(node, command)
+    out = `ssh #{node} "#{self._sanitise_cmdline(command)}"`
+    return out
   end
 
   def run_jobs()
@@ -58,7 +69,7 @@ class Profiles
       @jobs.each do |module_name, details|
         @results[node][module_name] = {}
         if details['repeat_list']
-          run_list = `#{details['repeat_list']}`.split(/\n/)
+          run_list = self._run_cmd(node, details['repeat_list']).split(/\n/)
           run_list.each do |entry|
             @results[node][module_name][entry] = {}
           end
@@ -67,10 +78,11 @@ class Profiles
         details['commands'].each do |command_name, command_cli|
           if details.key?('repeat_list')
             run_list.each do |entry|
-              @results[node][module_name][entry][command_name] = `ssh #{node} #{command_cli.sub('ENTRY', entry)}`
+              run_cmd = command_cli.sub('ENTRY', entry)
+              @results[node][module_name][entry][command_name] = self._run_cmd(node, run_cmd).tr("\n", "")
             end
           else
-            @results[node][module_name][command_name] = `ssh #{node} #{command_cli}`
+            @results[node][module_name][command_name] = self._run_cmd(node, command_cli).tr("\n", "")
           end
         end
       end
@@ -85,6 +97,7 @@ class Profiles
         puts "node,#{module_name},"
       end
     else
+      #puts @results
       puts @results.to_yaml
     end
   end
