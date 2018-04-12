@@ -33,8 +33,6 @@ class Profiles
   end
 
   def find_jobs()
-    #puts "Profile is #{@profile}"
-    
     # Collect files
     if @profile != 'all'
       module_files = Dir.glob("profiles/#{@profile}/*.yaml")
@@ -47,9 +45,6 @@ class Profiles
       yaml_load = YAML.load_file(infile)
       @jobs[yaml_load['module_name']] = yaml_load.dup.tap { |h| h.delete('module_name') }
     end
-
-    # Return
-    #puts @jobs
   end
 
   def _sanitise_cmdline(command)
@@ -89,7 +84,7 @@ class Profiles
     end
   end
 
-  def results(format)
+  def results(format, outfile)
     if format == 'csv'
       # TODO: actually write the csv output format
       puts "nodename,module_name,"
@@ -97,8 +92,10 @@ class Profiles
         puts "node,#{module_name},"
       end
     else
-      #puts @results
       puts @results.to_yaml
+      if outfile
+        File.write(outfile, @results.to_yaml)
+      end
     end
   end
 

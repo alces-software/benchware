@@ -33,4 +33,4 @@ options = MainParser.parse(ARGV)
 # Run Command
 run_profile = Profiles.new(options['profile'], options['nodes'])
 run_profile.run_jobs()
-run_profile.results(options['output'])
+run_profile.results(options['output'], options['file'])

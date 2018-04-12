@@ -32,6 +32,7 @@ class MainParser
   # Defaults
   options['output'] = 'yaml'
   options['profile'] = 'all'
+  options['file'] = nil
 
   opt_parser = OptionParser.new do |opt|
     opt.banner = "Usage: benchware [OPTIONS] -n \"NODES\""
@@ -51,7 +52,13 @@ class MainParser
       options['nodes'] = nodeslist
     end
 
-    opt.on("-o","--output","format for data to be output in, can be one of: #{formats.join(' ')}")
+    opt.on("-o","--output","format for data to be output in, can be one of: #{formats.join(' ')}") do |format|
+      options['output'] = format
+    end
+
+    opt.on("-f","--file","file to write command output to") do |filename|
+      options['file'] = filename
+    end
 
     opt.on("-h","--help","show this help screen") do
         puts opt
