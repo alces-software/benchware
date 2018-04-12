@@ -1,3 +1,6 @@
 module_name: gpu
+repeat_list: "lspci |grep -i nvid |awk '{print $1}'"
 commands:
-  command1: 'test it'
+  type: "lspci |grep ^ENTRY |sed 's/.*: //g;s/ (.*//g'"
+  driver_version: "grep NVIDIA /proc/driver/nvidia/version |sed 's/.*Kernel Module  //g;s/ .*//g'"
+  bus_id: "echo ENTRY"
