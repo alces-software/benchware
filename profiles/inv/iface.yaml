@@ -3,7 +3,7 @@ repeat_list: "ls /etc/sysconfig/network-scripts/ifcfg-* |sed 's/.*ifcfg-//g' |gr
 commands:
   type: "grep '^TYPE=' /etc/sysconfig/network-scripts/ifcfg-ENTRY |sed 's/TYPE=//g'"
   state: "ip addr show |grep ENTRY: |sed 's/.*state //g;s/ qlen.*//g'"
-  speed: "echo $(ethtool ENTRY |grep Speed || echo 'Speed: N/A' ) |awk '{print $2}'"
+  speed: "echo $(ethtool ENTRY |grep Speed |grep -v Unknown || ibstatus |grep rate -m 1 || echo 'Speed: N/A') |awk '{print $2}'"
   slaves: "grep ENTRY /etc/sysconfig/network-scripts/ifcfg-* |grep -E 'MASTER|BRIDGE' |sed 's/.*ifcfg-//g;s/:.*//g' |xargs"
-  mac: "ifconfig ENTRY |grep ether |awk '{print $2}'"
+  mac: "echo $(ifconfig ENTRY |grep ether || echo 'mac N/A') |awk '{print $2}'"
   location: "ethtool -i ENTRY |grep ^bus-info |awk '{print $2}'"
