@@ -52,11 +52,11 @@ class MainParser
       options['nodes'] = nodeslist
     end
 
-    opt.on("-o","--output","format for data to be output in, can be one of: #{formats.join(' ')}") do |format|
+    opt.on("-o","--output FORMAT","format for data to be output in, can be one of: #{formats.join(' ')}") do |format|
       options['output'] = format
     end
 
-    opt.on("-f","--file","file to write command output to") do |filename|
+    opt.on("-f","--file FILE","file to write command output to") do |filename|
       options['file'] = filename
     end
 
