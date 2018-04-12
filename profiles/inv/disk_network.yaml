@@ -1,4 +1,0 @@
-module_name: networkdisks
-commands:
-  free_space: 'test it'
-  write_speed: 'test it'

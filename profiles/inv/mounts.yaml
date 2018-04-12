@@ -1,0 +1,4 @@
+module_name: network_mounts
+repeat_list: "grep -E 'nfs|lustre' /etc/fstab |awk '{print $2}'"
+commands:
+  mounted: "mount -l -t nfs,lustre |grep -q ENTRY && echo 'yes' || echo 'no'"
