@@ -86,6 +86,7 @@ class Profiles
           end
         end
       end
+      self._writeout(@results.select{|x| x == node}.to_yaml)
     end
   end
 
@@ -129,6 +130,12 @@ class Profiles
     end
   end
 
+  def _writeout(data)
+    if @file
+      File.write(@file, data, File.size(@file), mode: 'a')
+    end
+  end
+
   def results()
     if @format == 'csv'
       # TODO: actually write the csv output format
@@ -139,9 +146,6 @@ class Profiles
     else
       #puts @results.to_yaml
       self._page_output(@results)
-      if @file
-        File.write(@file, @results.to_yaml)
-      end
     end
   end
 
