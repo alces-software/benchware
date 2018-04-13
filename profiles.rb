@@ -86,7 +86,7 @@ class Profiles
           end
         end
       end
-      self._write_to_outfile(@results.select{|x| x == node}.to_yaml)
+      File.write(@file, @results.to_yaml)
     end
   end
 
@@ -127,16 +127,6 @@ class Profiles
         end
       end
       self._continue
-    end
-  end
-
-  def _write_to_outfile(data)
-    if @file
-      if File.file?(filename)
-        File.write(@file, data, File.size(@file), mode: 'a')
-      else
-        File.write(@file, data)
-      end
     end
   end
 
