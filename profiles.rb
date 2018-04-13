@@ -32,6 +32,7 @@ class Profiles
     @output = options['output']
     @file = options['file']
     @row_height = options['row_height']
+    @quiet = options['quiet']
     @jobs = {}
     @results = {}
     self.find_jobs()
@@ -131,15 +132,17 @@ class Profiles
   end
 
   def results()
-    if @format == 'csv'
-      # TODO: actually write the csv output format
-      puts "nodename,module_name,"
-      @results.each do |node, module_name|
-        puts "node,#{module_name},"
+    unless @quiet
+      if @format == 'csv'
+        # TODO: actually write the csv output format
+        puts "nodename,module_name,"
+        @results.each do |node, module_name|
+          puts "node,#{module_name},"
+        end
+      else
+        #puts @results.to_yaml
+        self._page_output(@results)
       end
-    else
-      #puts @results.to_yaml
-      self._page_output(@results)
     end
   end
 

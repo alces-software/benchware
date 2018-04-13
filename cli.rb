@@ -34,6 +34,7 @@ class MainParser
   options['profile'] = 'all'
   options['file'] = nil
   options['row_height'] = 30
+  options['quiet'] = false
 
   opt_parser = OptionParser.new do |opt|
     opt.banner = "Usage: benchware [OPTIONS] -n \"NODES\""
@@ -63,6 +64,10 @@ class MainParser
 
     opt.on("-l","--length LENGTH",Integer,"the height of the paged output") do |height|
       options['row_height'] = height
+    end
+
+    opt.on("-q","--quiet","don't display results in terminal, useful for just writing to a file") do |quiet|
+      options['quiet'] = quiet
     end
 
     opt.on("-h","--help","show this help screen") do
