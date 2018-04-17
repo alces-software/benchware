@@ -26,7 +26,8 @@ class MainParser
 
   def self.parse(args)
   options = {}
-  profiles = ['all', 'inv', 'diag', 'perf']
+  #profiles = ['all', 'inv', 'diag', 'perf']
+  profiles = ['all'] + Dir.glob('profiles/*').map{ |x| File.basename(x) }
   formats = ['yaml', 'csv']
 
   # Defaults
@@ -41,7 +42,7 @@ class MainParser
     opt.separator  ""
     opt.separator  "Options:"
 
-    opt.on("-p","--profile PROFILE","profile of checks to run","  all - Runs all profiles [default]","  inv - System information only","  diag - Run diagnostic checks","  perf - Run performance tests") do |prof|
+    opt.on("-p","--profile PROFILE","profile of checks to run","  all - Runs all profiles [default]","  inv - System information only","  diag - Run diagnostic checks","  perf - Run performance tests", "any directory in profiles/ is a valid profile") do |prof|
       if profiles.include? prof
         options['profile'] = prof
       else

@@ -64,8 +64,15 @@ class Profiles
     return out
   end
 
+  def _run_script(node, script, entry=nil)
+    out = `ssh #{node} "bash -s" -- < #{script} #{entry}`
+    return out
+  end
+
   def run_jobs()
     @nodes.each do |node|
+
+      # Prepare results hash structure
       @results[node] = {}
       @jobs.each do |module_name, details|
         @results[node][module_name] = {}
@@ -76,6 +83,7 @@ class Profiles
           end
         end
 
+        # Run commands
         details['commands'].each do |command_name, command_cli|
           if details.key?('repeat_list')
             run_list.each do |entry|
@@ -84,6 +92,17 @@ class Profiles
             end
           else
             @results[node][module_name][command_name] = self._run_cmd(node, command_cli).tr("\n", "")
+          end
+        end
+
+        # Run scripts
+        details['scripts'].each do |script_name, script_path|
+          if details.key?('repeat_list')
+            run_list.each do |entry|
+              @results[node][module_name][entry][script_name] = self._run_script(node, script_path, entry).tr("\n", "")
+            end
+          else
+            @results[node][module_name][script_name] = self._run_script(node, script_path).tr("\n", "")
           end
         end
       end

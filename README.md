@@ -61,8 +61,8 @@ Data will be output in YAML by default but can also be set as CSV
 - Services
   - Date/Time
   - Queue System (SLURM)
-  - User Management (IPA)
-  - Node Monitoring (Ganglia/Nagios)
+  - User Management (IPA) - NOT YET IMPLEMENTED
+  - Node Monitoring (Ganglia)
 - Benchmarks
   - Memtester
   - HPL
@@ -75,6 +75,9 @@ module_name: name_of_module
 repeat_list: "command to return newline separated list of items to run the commands on"
 commands:
   command_name: "way of running test"
+scripts:
+  script_name: "path/to/script"
 ```
 
-To use the entries in the `repeat_list` variable (`repeat_list` is optional) put all caps `ENTRY` in the command for it to be substituted at execution. 
+- To use the entries in the `repeat_list` variable (`repeat_list` is optional) put all caps `ENTRY` in the command for it to be substituted at execution. For scripts ENTRY will be the first argument given to the script upon execution.
+- Scripts allow for larger commands (which require a bit more than a one-liner to get suitable output) to be specified with a relative path to the _benchware installation directory_, this script is then copied across to the client node temporarily to be executed.
