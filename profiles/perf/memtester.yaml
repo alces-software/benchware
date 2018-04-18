@@ -1,0 +1,3 @@
+module_name: memory
+scripts:
+  memtester: "profiles/perf/memtester.sh"

@@ -1,0 +1,4 @@
+module_name: disks
+repeat_list: "lsscsi |grep disk |awk -F '[[:space:]][[:space:]]+' '{print $6}'"
+scripts:
+  write_speed: "profiles/perf/dd.sh"

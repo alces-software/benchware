@@ -1,0 +1,3 @@
+module_name: ipmi
+commands:
+  selerrors: "ipmitool sel elist |grep -i err |wc -l"
