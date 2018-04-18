@@ -111,7 +111,10 @@ class Profiles
         end
 
       end
-      File.write(@file, @results.to_yaml)
+
+      if @file
+        File.write(@file, @results.to_yaml)
+      end
     end
   end
 
