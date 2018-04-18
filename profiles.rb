@@ -119,7 +119,7 @@ class Profiles
   end
 
   def _continue
-    print "Press any key to continue"
+    puts "Press any key to continue"
     STDIN.getch
   end
 
@@ -134,6 +134,7 @@ class Profiles
       row_num = 1
       node_data.each do |module_name, module_commands|
         puts "  #{module_name}:"
+        row_num += 1
         module_commands.each do |command, output|
           if output.class == Hash
             puts "    #{command}:"
