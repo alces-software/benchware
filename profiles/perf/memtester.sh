@@ -19,7 +19,7 @@ fi
 
 i=1
 while [ $i -le $CORES ] ; do
-   memtester $MEMPERCORE\M 3 > /tmp/memtest.out.$i 2>&1 &
+   $MEMTESTER $MEMPERCORE\M 3 > /tmp/memtest.out.$i 2>&1 &
    i=`expr $i + 1`
 done
 
