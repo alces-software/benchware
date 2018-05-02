@@ -65,7 +65,7 @@ class Profiles
   end
 
   def _run_script(node, script, entry=nil)
-    out = `ssh #{node} "bash -s" -- < #{script} #{entry}`
+    out = `ssh #{node} "bash -l -s" -- < #{script} #{entry}`
     return out
   end
 

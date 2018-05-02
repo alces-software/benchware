@@ -10,7 +10,7 @@ ulimit -l unlimited
 
 if hash memtester 2> /dev/null ; then
     MEMTESTER=$(which memtester)
-elif module load apps/memtester 2> /dev/null ; then
+elif module load 'apps/memtester' 2> /dev/null ; then
     MEMTESTER=$(which memtester)
 else
     echo "memtester cannot be found"
