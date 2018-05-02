@@ -1,5 +1,5 @@
 module_name: services
 commands:
   date: "date +'%H:%M:%S %D'"
-  queue: "echo $(systemctl list-unit-files |grep -E -m 1 'slurm|sge' || echo 'N/A') |awk '{print $1}' |sed 's/\..*//g'"
+  queue: "echo $(systemctl list-unit-files |grep -E -m 1 'slurm|sge' || echo 'N/A') |awk '{print $1}' |sed 's/.service.*//g'"
   ganglia: "echo $(systemctl status gmond 2> /dev/null |grep Active -m 1 || echo 'N/A N/A') |awk '{print $2'}"
