@@ -113,7 +113,12 @@ class Profiles
       end
 
       if @file
-        File.write(@file, @results.to_yaml)
+        case @output
+        when 'md'
+          File.write(@file, self._to_md(@results))
+        else
+          File.write(@file, @results.to_yaml)
+        end
       end
     end
   end
@@ -159,18 +164,53 @@ class Profiles
     end
   end
 
+  def _to_md(data)
+    count = 1
+    puts "# Table of Contents"
+    data.each do |node, node_data|
+      puts "#{count}. [#{self._md_tidy(node)}](##{self._md_tidy(node)})"
+      count += 1
+    end
+    puts ""
+    data.each do |node, node_data|
+      puts "# #{self._md_tidy(node)}"
+      node_data.each do |module_name, module_commands|
+        puts "## #{self._md_tidy(module_name)}"
+        puts "| | |"
+        puts "| --- | --- |"
+        module_commands.each do |command, output|
+          if output.class == Hash
+            puts "| __#{self._md_tidy(command)}__ |  |"
+            output.each do |entry, out|
+              puts "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
+            end
+          else
+            puts "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
+          end
+        end
+      end
+    end
+  end
+
+  def _md_tidy(string)
+    string = string.to_s
+    unless string.empty?
+      # Replace underscores with spaces
+      string_clean = string.sub('_', ' ')
+
+      # Capitalise words 
+      string_clean = string_clean.split.map(&:capitalize).join(' ')
+
+      # Return it
+      return string_clean
+    else
+      return string
+    end
+  end
+
   def results()
     unless @quiet
-      if @format == 'csv'
-        # TODO: actually write the csv output format
-        puts "nodename,module_name,"
-        @results.each do |node, module_name|
-          puts "node,#{module_name},"
-        end
-      else
-        #puts @results.to_yaml
-        self._page_output(@results)
-      end
+      self._page_output(@results)
     end
   end
 

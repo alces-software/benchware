@@ -28,7 +28,7 @@ class MainParser
   options = {}
   #profiles = ['all', 'inv', 'diag', 'perf']
   profiles = ['all'] + Dir.glob('profiles/*').map{ |x| File.basename(x) }
-  formats = ['yaml', 'csv']
+  formats = ['yaml', 'md']
 
   # Defaults
   options['output'] = 'yaml'
