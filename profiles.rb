@@ -116,8 +116,13 @@ class Profiles
         case @output
         when 'md'
           File.write(@file, self._to_md(@results))
-        else
+        when 'yaml'
           File.write(@file, @results.to_yaml)
+        when 'yamdown'
+          File.write(@file, self._to_yamdown(@results))
+        else
+          puts "Output format #{@output} is unknown to benchware, using yamdown"
+          File.write(@file, self._to_yamdown(@results))
         end
       end
     end
@@ -161,6 +166,34 @@ class Profiles
         end
       end
       self._continue
+    end
+  end
+
+  def _to_yamdown(data)
+    data.each do |node, node_data|
+      puts "#{node}:"
+      puts "  name: #{node}"
+      puts "  type: NOT-YET-IMPLEMENTED"
+      puts "  primary_group: NOT-YET-IMPLEMENTED"
+      puts "  secondary_group: NOT-YET-IMPLEMENTED"
+      puts "  info: |"
+      node_data.each do |module_name, module_commands|
+        puts "## #{self._md_tidy(module_name)}"
+        puts ""
+        puts "| | |"
+        puts "| --- | --- |"
+        module_commands.each do |command, output|
+          if output.class == Hash
+            puts "| __#{self._md_tidy(command)}__ |  |"
+            output.each do |entry, out|
+              puts "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
+            end
+          else
+            puts "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
+          end
+        end
+        puts ""
+      end
     end
   end
 

@@ -28,10 +28,10 @@ class MainParser
   options = {}
   #profiles = ['all', 'inv', 'diag', 'perf']
   profiles = ['all'] + Dir.glob('profiles/*').map{ |x| File.basename(x) }
-  formats = ['yaml', 'md']
+  formats = ['yaml', 'md', 'yamdown']
 
   # Defaults
-  options['output'] = 'yaml'
+  options['output'] = 'yamdown'
   options['profile'] = 'all'
   options['file'] = nil
   options['row_height'] = 30
