@@ -200,31 +200,33 @@ class Profiles
   end
 
   def _to_md(data)
+    content = []
     count = 1
-    puts "# Table of Contents"
+    content << "# Table of Contents"
     data.each do |node, node_data|
-      puts "#{count}. [#{self._md_tidy(node)}](##{self._md_tidy(node)})"
+      content << "#{count}. [#{self._md_tidy(node)}](##{self._md_tidy(node)})"
       count += 1
     end
-    puts ""
+    content << ""
     data.each do |node, node_data|
-      puts "# #{self._md_tidy(node)}"
+      content << "# #{self._md_tidy(node)}"
       node_data.each do |module_name, module_commands|
-        puts "## #{self._md_tidy(module_name)}"
-        puts "| | |"
-        puts "| --- | --- |"
+        content << "## #{self._md_tidy(module_name)}"
+        content << "| | |"
+        content << "| --- | --- |"
         module_commands.each do |command, output|
           if output.class == Hash
-            puts "| __#{self._md_tidy(command)}__ |  |"
+            content << "| __#{self._md_tidy(command)}__ |  |"
             output.each do |entry, out|
-              puts "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
+              content << "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
             end
           else
-            puts "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
+            content << "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
           end
         end
       end
     end
+    return content.join("\n")
   end
 
   def _md_tidy(string)
