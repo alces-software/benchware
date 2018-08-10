@@ -33,7 +33,7 @@ class MainParser
   # Defaults
   options['output'] = 'yamdown'
   options['profile'] = 'all'
-  options['file'] = nil
+  options['file'] = "/tmp/benchware.out.#{('a'..'z').to_a.shuffle[0,8].join}"
   options['row_height'] = 30
   options['quiet'] = false
 
