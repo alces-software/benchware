@@ -41,9 +41,9 @@ class Profiles
   def find_jobs()
     # Collect files
     if @profile != 'all'
-      module_files = Dir.glob("profiles/#{@profile}/*.yaml")
+      module_files = Dir.glob("profiles/#{@profile}/*.yaml").sort
     else
-      module_files = Dir.glob("profiles/*/*.yaml")
+      module_files = Dir.glob("profiles/*/*.yaml").sort
     end
 
     # Configure module name dict w/ commands from files
@@ -170,31 +170,33 @@ class Profiles
   end
 
   def _to_yamdown(data)
+    content = []
     data.each do |node, node_data|
-      puts "#{node}:"
-      puts "  name: #{node}"
-      puts "  type: NOT-YET-IMPLEMENTED"
-      puts "  primary_group: NOT-YET-IMPLEMENTED"
-      puts "  secondary_group: NOT-YET-IMPLEMENTED"
-      puts "  info: |"
+      content << "#{node}:"
+      content << "  name: #{node}"
+      content << "  type: NOT-YET-IMPLEMENTED"
+      content << "  primary_group: NOT-YET-IMPLEMENTED"
+      content << "  secondary_group: NOT-YET-IMPLEMENTED"
+      content << "  info: |"
       node_data.each do |module_name, module_commands|
-        puts "## #{self._md_tidy(module_name)}"
-        puts ""
-        puts "| | |"
-        puts "| --- | --- |"
+        content << "## #{self._md_tidy(module_name)}"
+        content << ""
+        content << "| | |"
+        content << "| --- | --- |"
         module_commands.each do |command, output|
           if output.class == Hash
-            puts "| __#{self._md_tidy(command)}__ |  |"
+            content << "| __#{self._md_tidy(command)}__ |  |"
             output.each do |entry, out|
-              puts "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
+              content << "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
             end
           else
-            puts "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
+            content << "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
           end
         end
-        puts ""
+        content << ""
       end
     end
+    return content.join("\n")
   end
 
   def _to_md(data)
@@ -245,6 +247,7 @@ class Profiles
     unless @quiet
       self._page_output(@results)
     end
+    puts "Results written to #{@file}"
   end
 
 end
