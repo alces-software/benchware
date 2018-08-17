@@ -23,6 +23,7 @@
 require 'yaml'
 require 'cli/ui'
 require 'io/console'
+require 'erubis'
 
 class Profiles
 
@@ -35,15 +36,16 @@ class Profiles
     @quiet = options['quiet']
     @jobs = {}
     @results = {}
+    @meta = YAML.load_file("profiles/meta.yaml")
     self.find_jobs()
   end
 
   def find_jobs()
     # Collect files
     if @profile != 'all'
-      module_files = Dir.glob("profiles/#{@profile}/*.yaml")
+      module_files = Dir.glob("profiles/#{@profile}/*.yaml").sort
     else
-      module_files = Dir.glob("profiles/*/*.yaml")
+      module_files = Dir.glob("profiles/*/*.yaml").sort
     end
 
     # Configure module name dict w/ commands from files
@@ -59,13 +61,19 @@ class Profiles
     return clean
   end
 
+  def _run_meta(node, command_cli)
+    command = command_cli.sub('ENTRY', node)
+    out = `#{command}`
+    return out
+  end
+
   def _run_cmd(node, command)
     out = `ssh #{node} "#{self._sanitise_cmdline(command)}"`
     return out
   end
 
   def _run_script(node, script, entry=nil)
-    out = `ssh #{node} "bash -s" -- < #{script} #{entry}`
+    out = `ssh #{node} "bash -l -s" -- < #{script} #{entry}`
     return out
   end
 
@@ -74,6 +82,13 @@ class Profiles
 
       # Prepare results hash structure
       @results[node] = {}
+
+      # Gather metadata from localhost
+      @meta['commands'].each do |command_name, command_cli|
+        @results[node][command_name] = self._run_meta(node, command_cli).tr("\n", "")
+      end
+
+      # Run the rest of the jobs
       @jobs.each do |module_name, details|
         @results[node][module_name] = {}
         if details['repeat_list']
@@ -113,7 +128,17 @@ class Profiles
       end
 
       if @file
-        File.write(@file, @results.to_yaml)
+        case @output
+        when 'md'
+          File.write(@file, self._to_md(@results))
+        when 'yaml'
+          File.write(@file, @results.to_yaml)
+        when 'yamdown'
+          File.write(@file, self._to_yamdown(@results))
+        else
+          puts "Output format #{@output} is unknown to benchware, using yamdown"
+          File.write(@file, self._to_yamdown(@results))
+        end
       end
     end
   end
@@ -159,19 +184,27 @@ class Profiles
     end
   end
 
+  def _to_yamdown(data)
+    content = []
+    template = File.read('templates/flightcenter.md.erb')
+    data.each do |node, node_data|
+      content << "#{node}:"
+      content << "  name: #{node}"
+      content << "  type: #{node_data['type']}"
+      content << "  primary_group: #{node_data['primary_group']}"
+      content << "  secondary_group: #{node_data['secondary_groups']}"
+      content << "  info: |"
+      content << Erubis::Eruby.new(template).result(binding)
+      content << ""
+    end
+    return content.join("\n")
+  end
+
   def results()
     unless @quiet
-      if @format == 'csv'
-        # TODO: actually write the csv output format
-        puts "nodename,module_name,"
-        @results.each do |node, module_name|
-          puts "node,#{module_name},"
-        end
-      else
-        #puts @results.to_yaml
-        self._page_output(@results)
-      end
+      self._page_output(@results)
     end
+    puts "Results written to #{@file}"
   end
 
 end

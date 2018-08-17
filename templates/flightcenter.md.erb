@@ -1,0 +1,42 @@
+# System
+
+## BIOS Version
+
+```<%= node_data['system']['bios_version'] %>```
+
+## Service Tag
+
+```<%= node_data['system']['service_tag'] %>```
+
+## CPU(s)
+
+- Model: <%= node_data['cpu']['model'] %>
+- Cores: <%= node_data['cpu']['num_cores'] %>
+- Count: NOT IMPLEMENTED
+- Hyperthreading: <%= node_data['cpu']['hyperthreading'] %>
+
+## RAM
+
+- Total: <%= node_data['memory']['total'] %>
+
+<% unless node_data['gpu'].empty? -%>
+## GPU
+<% end -%>
+
+# Network Devices
+
+| Interface | Type | State | Speed | Slaves | MAC | Location |
+|-----------|------|-------|-------|--------|-----|----------|
+<% node_data['interface'].each do |iface, details| -%>
+| __<%= iface %>__ | <%= details['type'] %> | <%= details['state'] %> | <%= details['speed'] %> | <%= details['slaves'] %> | <%= details['mac'] %> | <%= details['location'] %> |
+<% end -%>
+
+<% unless node_data['disks'].empty? -%>
+# Disks
+
+| Device | Size |
+|--------|------|
+<% node_data['disks'].each do |disk, details| -%>
+| __<%= disk %>__ | <%= details['size']%> |
+<% end -%>
+<% end -%>

@@ -28,12 +28,12 @@ class MainParser
   options = {}
   #profiles = ['all', 'inv', 'diag', 'perf']
   profiles = ['all'] + Dir.glob('profiles/*').map{ |x| File.basename(x) }
-  formats = ['yaml', 'csv']
+  formats = ['yaml', 'yamdown']
 
   # Defaults
-  options['output'] = 'yaml'
+  options['output'] = 'yamdown'
   options['profile'] = 'all'
-  options['file'] = nil
+  options['file'] = "/tmp/benchware.out.#{('a'..'z').to_a.shuffle[0,8].join}"
   options['row_height'] = 30
   options['quiet'] = false
 
