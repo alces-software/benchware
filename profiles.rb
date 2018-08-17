@@ -200,52 +200,6 @@ class Profiles
     return content.join("\n")
   end
 
-  def _to_md(data)
-    content = []
-    count = 1
-    content << "# Table of Contents"
-    data.each do |node, node_data|
-      content << "#{count}. [#{self._md_tidy(node)}](##{self._md_tidy(node)})"
-      count += 1
-    end
-    content << ""
-    data.each do |node, node_data|
-      content << "# #{self._md_tidy(node)}"
-      node_data.each do |module_name, module_commands|
-        content << "## #{self._md_tidy(module_name)}"
-        content << "| | |"
-        content << "| --- | --- |"
-        module_commands.each do |command, output|
-          if output.class == Hash
-            content << "| __#{self._md_tidy(command)}__ |  |"
-            output.each do |entry, out|
-              content << "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
-            end
-          else
-            content << "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
-          end
-        end
-      end
-    end
-    return content.join("\n")
-  end
-
-  def _md_tidy(string)
-    string = string.to_s
-    unless string.empty?
-      # Replace underscores with spaces
-      string_clean = string.sub('_', ' ')
-
-      # Capitalise words 
-      string_clean = string_clean.split.map(&:capitalize).join(' ')
-
-      # Return it
-      return string_clean
-    else
-      return string
-    end
-  end
-
   def results()
     unless @quiet
       self._page_output(@results)
