@@ -23,6 +23,7 @@
 require 'yaml'
 require 'cli/ui'
 require 'io/console'
+require 'erubis'
 
 class Profiles
 
@@ -185,30 +186,16 @@ class Profiles
 
   def _to_yamdown(data)
     content = []
+    template = File.read('templates/flightcenter.md.erb')
     data.each do |node, node_data|
       content << "#{node}:"
       content << "  name: #{node}"
-      content << "  type: NOT-YET-IMPLEMENTED"
-      content << "  primary_group: NOT-YET-IMPLEMENTED"
-      content << "  secondary_group: NOT-YET-IMPLEMENTED"
+      content << "  type: #{node_data['type']}"
+      content << "  primary_group: #{node_data['primary_group']}"
+      content << "  secondary_group: #{node_data['secondary_groups']}"
       content << "  info: |"
-      node_data.each do |module_name, module_commands|
-        content << "## #{self._md_tidy(module_name)}"
-        content << ""
-        content << "| | |"
-        content << "| --- | --- |"
-        module_commands.each do |command, output|
-          if output.class == Hash
-            content << "| __#{self._md_tidy(command)}__ |  |"
-            output.each do |entry, out|
-              content << "| #{self._md_tidy(entry)} | #{self._md_tidy(out)} |"
-            end
-          else
-            content << "| __#{self._md_tidy(command)}__ | #{self._md_tidy(output)} |"
-          end
-        end
-        content << ""
-      end
+      content << Erubis::Eruby.new(template).result(binding)
+      content << ""
     end
     return content.join("\n")
   end
