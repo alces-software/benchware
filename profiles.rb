@@ -35,6 +35,7 @@ class Profiles
     @quiet = options['quiet']
     @jobs = {}
     @results = {}
+    @meta = YAML.load_file("profiles/meta.yaml")
     self.find_jobs()
   end
 
@@ -59,6 +60,12 @@ class Profiles
     return clean
   end
 
+  def _run_meta(node, command_cli)
+    command = command_cli.sub('ENTRY', node)
+    out = `#{command}`
+    return out
+  end
+
   def _run_cmd(node, command)
     out = `ssh #{node} "#{self._sanitise_cmdline(command)}"`
     return out
@@ -74,6 +81,13 @@ class Profiles
 
       # Prepare results hash structure
       @results[node] = {}
+
+      # Gather metadata from localhost
+      @meta['commands'].each do |command_name, command_cli|
+        @results[node][command_name] = self._run_meta(node, command_cli).tr("\n", "")
+      end
+
+      # Run the rest of the jobs
       @jobs.each do |module_name, details|
         @results[node][module_name] = {}
         if details['repeat_list']
