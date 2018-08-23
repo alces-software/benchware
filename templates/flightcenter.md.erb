@@ -25,10 +25,10 @@
 
     # Network Devices
 
-    | Interface | Type | State | Speed | Slaves | MAC | Location |
-    |-----------|------|-------|-------|--------|-----|----------|
+    | Interface | Type | Speed | Slaves | MAC | Location |
+    |-----------|------|-------|--------|-----|----------|
     <% node_data['interface'].each do |iface, details| -%>
-    | __<%= iface %>__ | <%= details['type'] %> | <%= details['state'] %> | <%= details['speed'] %> | <%= details['slaves'] %> | <%= details['mac'] %> | <%= details['location'] %> |
+    | __<%= iface %>__ | <%= details['type'] %> | <%= details['speed'] %> | <%= details['slaves'] %> | <%= details['mac'] %> | <%= details['location'] %> |
     <% end -%>
 
     <% unless node_data['disks'].empty? -%>
