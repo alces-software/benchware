@@ -1,5 +1,4 @@
 module_name: meta
 commands:
-  type: "echo 'NOT IMPLEMENTED'"
   primary_group: "nodeattr -l ENTRY |paste -s -d ',' |cut -d',' -f1"
   secondary_groups: "nodeattr -l ENTRY |paste -s -d ',' |cut -d',' -f2-"

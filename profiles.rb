@@ -190,7 +190,6 @@ class Profiles
     data.each do |node, node_data|
       content << "#{node}:"
       content << "  name: #{node}"
-      content << "  type: #{node_data['type']}"
       content << "  primary_group: #{node_data['primary_group']}"
       content << "  secondary_group: #{node_data['secondary_groups']}"
       content << "  info: |"
