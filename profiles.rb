@@ -129,8 +129,6 @@ class Profiles
 
       if @file
         case @output
-        when 'md'
-          File.write(@file, self._to_md(@results))
         when 'yaml'
           File.write(@file, @results.to_yaml)
         when 'yamdown'
