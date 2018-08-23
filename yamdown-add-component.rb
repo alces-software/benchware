@@ -10,7 +10,7 @@ name = ARGV.shift
 # Functions
 def print_help
   puts "Usage"
-  puts "  yamdown-add-switch FILE PRIMARY_GROUP NAME"
+  puts "  yamdown-add-component FILE PRIMARY_GROUP NAME"
   exit 1
 end
 
@@ -31,5 +31,5 @@ if name.nil?
 end
 
 # Add to file
-template = File.read('templates/flightcenter_switch.md.erb')
+template = File.read('templates/flightcenter_component.md.erb')
 File.open(file, 'a') { |f| f.write(Erubis::Eruby.new(template).result(binding)) }
