@@ -1,4 +1,5 @@
 module_name: gpu
+dependencies: pciutils
 repeat_list: "lspci |grep -i nvid |awk '{print $1}'"
 commands:
   type: "lspci |grep ^ENTRY |sed 's/.*: //g;s/ (.*//g'"
