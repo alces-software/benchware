@@ -21,7 +21,9 @@
 #==============================================================================
 
 require 'yaml'
-require 'cli/ui'
+if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4.1')
+  require 'cli/ui'
+end
 require 'io/console'
 require 'erubis'
 
@@ -161,6 +163,7 @@ class Profiles
         end
       end
     end
+    puts "Results written to #{@file}"
   end
 
   def _continue
@@ -223,7 +226,6 @@ class Profiles
     unless @quiet
       self._page_output(@results)
     end
-    puts "Results written to #{@file}"
   end
 
 end

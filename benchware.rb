@@ -33,4 +33,8 @@ options = MainParser.parse(ARGV)
 # Run Command
 run_profile = Profiles.new(options)
 run_profile.run_jobs()
-run_profile.results()
+if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4.1')
+  puts "Ruby version too low for page output, only writing to file"
+else
+  run_profile.results()
+end
