@@ -35,6 +35,7 @@ run_profile = Profiles.new(options)
 run_profile.run_jobs()
 if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4.1')
   puts "Ruby version too low for page output, only writing to file"
+  puts "More info - https://github.com/alces-software/benchware/pull/7"
 else
   run_profile.results()
 end
