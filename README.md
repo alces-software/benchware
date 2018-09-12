@@ -2,6 +2,21 @@
 
 A utility for checking, testing and benchmarking a cluster.
 
+## Installing
+
+- Clone benchware
+
+```
+git clone https://github.com/alces-software/benchware /opt/benchware
+```
+
+- Install gem dependencies
+
+```
+gem install cli-ui
+gem install erubis
+```
+
 ## Running Commands 
 
 ### Run all tests for a genders group
