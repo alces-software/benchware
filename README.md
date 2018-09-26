@@ -2,31 +2,47 @@
 
 A utility for checking, testing and benchmarking a cluster.
 
+## Installing
+
+- Clone benchware
+
+```
+git clone https://github.com/alces-software/benchware /opt/benchware
+```
+
+- Install gem dependencies
+
+```
+gem install cli-ui
+gem install erubis
+```
+
 ## Running Commands 
 
-### Run all tests for group
+### Run all tests for a genders group
 
 ```
-benchware --all --group=nodes
-benchware -a -g nodes
+cd /opt/benchware && ./benchware.rb --all --nodes "$(nodeattr -s mygendersgroup)"
+cd /opt/benchware && ./benchware.rb -a -n "$(nodeattr -s mygendersgroup)"
 ```
 
-### Run all tests for node
+### Run inventory checks for some nodes
 
 ```
-benchware --all --node=node001
-benchware -a -n node001
+cd /opt/benchware && ./benchware.rb --profile inv --nodes "node001 node002 thisnode01"
+cd /opt/benchware && ./benchware.rb -p inv -n "node001 node002 thisnode01"
 ```
-
-###
 
 ### Output formats
 
-Data will be output in YAML by default but can also be set as CSV
+The output format refers to how the file written by benchware will format the data. Without the `-q` option benchware will do a page-based yaml output which can be scrolled through.
+
+Data will be output in yamdown by default, a hybrid of yaml and markdown for use with Flight Center web services. Data can also be output in plain yaml.
 
 ## List of Checks and Tests
 
 - CPU
+  - Number of CPUs
   - Number of Cores
   - Hyperthreading (enable/disable)
   - Model #
@@ -72,6 +88,7 @@ Data will be output in YAML by default but can also be set as CSV
 
 ```
 module_name: name_of_module
+dependencies: "package_name another_package"
 repeat_list: "command to return newline separated list of items to run the commands on"
 commands:
   command_name: "way of running test"
@@ -79,5 +96,6 @@ scripts:
   script_name: "path/to/script"
 ```
 
+- The list of packages in `dependencies` will be installed with yum prior to any of the commands or scripts within it running
 - To use the entries in the `repeat_list` variable (`repeat_list` is optional) put all caps `ENTRY` in the command for it to be substituted at execution. For scripts ENTRY will be the first argument given to the script upon execution.
 - Scripts allow for larger commands (which require a bit more than a one-liner to get suitable output) to be specified with a relative path to the _benchware installation directory_, this script is then copied across to the client node temporarily to be executed.

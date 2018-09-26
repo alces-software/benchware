@@ -34,6 +34,8 @@ class Profiles
     @file = options['file']
     @row_height = options['row_height']
     @quiet = options['quiet']
+    @verbose = options['verbose']
+    @verbose_log = '/var/log/benchware.log'
     @jobs = {}
     @results = {}
     @meta = YAML.load_file("profiles/meta.yaml")
@@ -52,6 +54,13 @@ class Profiles
     module_files.each do |infile|
       yaml_load = YAML.load_file(infile)
       @jobs[yaml_load['module_name']] = yaml_load.dup.tap { |h| h.delete('module_name') }
+    end
+
+    if @verbose
+      # Write to global log
+      File.open(file, 'a') { |f| f.write("#{Time.now} - Running Benchware with the following options - "\
+                                        "profile = #{@profile}, nodes = #{@nodes}, output = #{@output}, file = #{@file}"\
+                                        "quiet = #{@quiet}, jobs = #{@jobs}")}
     end
   end
 
@@ -90,6 +99,17 @@ class Profiles
 
       # Run the rest of the jobs
       @jobs.each do |module_name, details|
+
+        # Install dependencies
+        if details.key?('dependencies')
+          # Captures all dependency install output and prepends the nodename
+          out = self._run_cmd(node, "yum install -y #{dependencies}").split("\n").map {|l| "#{node}: #{l}" }.join("\n")
+          if @verbose
+            # Write to global log
+            File.open(file, 'a') { |f| f.write(out)}
+          end
+        end
+
         @results[node][module_name] = {}
         if details['repeat_list']
           run_list = self._run_cmd(node, details['repeat_list']).split(/\n/)
@@ -141,6 +161,7 @@ class Profiles
         end
       end
     end
+    puts "Results written to #{@file}"
   end
 
   def _continue
@@ -203,7 +224,6 @@ class Profiles
     unless @quiet
       self._page_output(@results)
     end
-    puts "Results written to #{@file}"
   end
 
 end

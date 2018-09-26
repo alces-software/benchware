@@ -36,6 +36,7 @@ class MainParser
   options['file'] = "/tmp/benchware.out.#{('a'..'z').to_a.shuffle[0,8].join}"
   options['row_height'] = 30
   options['quiet'] = false
+  options['verbose'] = false
 
   opt_parser = OptionParser.new do |opt|
     opt.banner = "Usage: benchware [OPTIONS] -n \"NODES\""
@@ -69,6 +70,10 @@ class MainParser
 
     opt.on("-q","--quiet","don't display results in terminal, useful for just writing to a file") do |quiet|
       options['quiet'] = quiet
+    end
+
+    opt.on("-v","--verbose","create additional debug info in /var/log/benchware.log") do |verbose|
+      options['verbose'] = verbose
     end
 
     opt.on("-h","--help","show this help screen") do
