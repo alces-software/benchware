@@ -21,9 +21,7 @@
 #==============================================================================
 
 require 'yaml'
-unless Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4.1')
-  require 'cli/ui'
-end
+require 'cli/ui'
 require 'io/console'
 require 'erubis'
 
