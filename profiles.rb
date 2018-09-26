@@ -103,7 +103,7 @@ class Profiles
         # Install dependencies
         if details.key?('dependencies')
           # Captures all dependency install output and prepends the nodename
-          out = self._run_cmd(node, "yum install -y #{dependencies}").split("\n").map {|l| "#{node}: #{l}" }.join("\n")
+          out = self._run_cmd(node, "yum install -y #{details['dependencies']}").split("\n").map {|l| "#{node}: #{l}" }.join("\n")
           if @verbose
             # Write to global log
             File.open(file, 'a') { |f| f.write(out)}
