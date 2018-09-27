@@ -1,4 +1,4 @@
 module_name: meta
-commands:
-  primary_group: "nodeattr -l ENTRY |paste -s -d ',' |cut -d',' -f1"
-  secondary_groups: "nodeattr -l ENTRY |paste -s -d ',' |cut -d',' -f2-"
+scripts:
+  primary_group: "scripts/primary_group.sh"
+  secondary_groups: "scripts/secondary_groups.sh"
