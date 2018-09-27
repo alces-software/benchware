@@ -70,9 +70,14 @@ class Profiles
     return clean
   end
 
-  def _run_meta(node, command_cli)
+  def _run_meta_cmd(node, command_cli)
     command = command_cli.sub('ENTRY', node)
     out = `#{command}`
+    return out
+  end
+
+  def _run_meta_script(node, script)
+    out = `bash #{script} #{node}`
     return out
   end
 
@@ -93,8 +98,15 @@ class Profiles
       @results[node] = {}
 
       # Gather metadata from localhost
-      @meta['commands'].each do |command_name, command_cli|
-        @results[node][command_name] = self._run_meta(node, command_cli).tr("\n", "")
+      if @meta.key?('commands')
+        @meta['commands'].each do |command_name, command_cli|
+          @results[node][command_name] = self._run_meta_cmd(node, command_cli).tr("\n", "")
+        end
+      end
+      if @meta.key?('scripts')
+        @meta['scripts'].each do |script_name, script|
+          @results[node][script_name] = self._run_meta_script(node, script).tr("\n", "")
+        end
       end
 
       # Run the rest of the jobs
