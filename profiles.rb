@@ -190,6 +190,16 @@ class Profiles
       system('clear')
       puts node
       row_num = 1
+      
+      # Display metadata 
+      metadata = ['primary_group', 'secondary_groups']
+      metadata.each do |meta|
+        puts "  #{meta}: #{node_data[meta]}"
+        node_data.delete_if {|key, value| key == meta }
+        row_num += 1
+      end 
+
+      # Display rest of data
       node_data.each do |module_name, module_commands|
         puts "  #{module_name}:"
         row_num += 1
