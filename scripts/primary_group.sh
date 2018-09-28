@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Vars
 node="$1"
