@@ -27,10 +27,17 @@ $LOAD_PATH << File.dirname(__FILE__)
 require 'cli'
 require 'profiles'
 
-# Parse arguments
-options = MainParser.parse(ARGV)
+begin
+  # Parse arguments
+  options = MainParser.parse(ARGV)
 
-# Run Command
-run_profile = Profiles.new(options)
-run_profile.run_jobs()
-run_profile.results()
+  # Run Command
+  run_profile = Profiles.new(options)
+  Bundler.with_clean_env do
+    run_profile.run_jobs()
+    run_profile.results()
+  end
+rescue
+  STDERR.puts $!.message
+  Kernel.exit(1)
+end
