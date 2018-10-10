@@ -13,7 +13,7 @@ git clone https://github.com/alces-software/benchware /opt/benchware
 - Install gem dependencies
 
 ```
-gem install cli-ui
+gem install cli-ui --version='1.1.1'
 gem install erubis
 ```
 
