@@ -33,9 +33,15 @@ begin
 
   # Run Command
   run_profile = Profiles.new(options)
-  Bundler.with_clean_env do
+  runner = lambda do
     run_profile.run_jobs()
     run_profile.results()
+  end
+
+  if Kernel.const_defined?(:Bundler)
+    Bundler.with_clean_env(&runner)
+  else
+    runner.call
   end
 rescue
   STDERR.puts $!.message
