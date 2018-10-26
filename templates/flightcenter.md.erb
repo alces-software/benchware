@@ -21,6 +21,12 @@
 
     <% unless node_data['gpu'].empty? -%>
     ## GPU
+
+    | Device | Driver | Bus ID |
+    |--------|--------|--------|
+    <% node_data['gpu'].each do |bus_id, details| -%>
+    | __ <%= details['type'] %> __ | <%= details['driver_version'] %> | <%= bus_id %> |
+    <% end -%>
     <% end -%>
 
     # Network Devices
