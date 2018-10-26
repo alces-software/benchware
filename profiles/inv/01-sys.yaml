@@ -1,4 +1,4 @@
 module_name: system
 commands:
   bios_version: "dmidecode -t bios |grep Version -m 1 |awk '{print $2}'"
-  service_tag: "dmidecode -t system |grep 'Serial Number' |awk '{print $3}'"
+  service_tag: "echo $(dmidecode -t system |grep 'Serial Number' |awk '{print $3}' |grep -v Not  || echo 'Not applicable, node is a VM')"
