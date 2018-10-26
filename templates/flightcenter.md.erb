@@ -28,7 +28,7 @@
     | Interface | Type | Speed | Slaves | MAC | Location |
     |-----------|------|-------|--------|-----|----------|
     <% node_data['interface'].each do |iface, details| -%>
-    | __<%= iface %>__ | <%= details['type'] %> | <%= details['speed'] %> | <%= details['slaves'] %> | <%= details['mac'] %> | <%= details['location'] %> |
+    | __ <%= iface %> __ | <%= details['type'] %> | <%= details['speed'] %> | <%= details['slaves'] %> | <%= details['mac'] %> | <%= details['location'] %> |
     <% end -%>
 
     <% unless node_data['disks'].empty? -%>
@@ -37,6 +37,6 @@
     | Device | Size |
     |--------|------|
     <% node_data['disks'].each do |disk, details| -%>
-    | __<%= disk %>__ | <%= details['size']%> |
+    | __ <%= disk %> __ | <%= details['size']%> |
     <% end -%>
     <% end -%>
