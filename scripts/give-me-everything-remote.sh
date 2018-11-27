@@ -31,10 +31,10 @@ pushd $TMPDIR
 ssh $NODE "lshw" > lshw
 ssh $NODE "lshw -short" > lshw-short
 ssh $NODE "lscpu" > lscpu
-ssh $NODE "lsblk" -a > lsblk-a
-ssh $NODE "lsusb" -v > lsusb-v
-ssh $NODE "lspci" -v > lspci-v
-ssh $NODE "lsscsi" -s > lsscsi-s
+ssh $NODE "lsblk -a" > lsblk-a
+ssh $NODE "lsusb -v" > lsusb-v
+ssh $NODE "lspci -v" > lspci-v
+ssh $NODE "lsscsi -s" > lsscsi-s
 ssh $NODE "dmidecode" > dmidecode
 popd
 
