@@ -32,7 +32,7 @@ lscpu > lscpu
 lsblk -a > lsblk-a
 lsusb -v > lsusb-v
 lspci -v > lspci-v
-lsscsi -s > lsscsi-s
+lsscsi > lsscsi
 dmidecode > dmidecode
 popd
 

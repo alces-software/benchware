@@ -34,7 +34,7 @@ ssh $NODE "lscpu" > lscpu
 ssh $NODE "lsblk -a" > lsblk-a
 ssh $NODE "lsusb -v" > lsusb-v
 ssh $NODE "lspci -v" > lspci-v
-ssh $NODE "lsscsi -s" > lsscsi-s
+ssh $NODE "lsscsi" > lsscsi
 ssh $NODE "dmidecode" > dmidecode
 popd
 
