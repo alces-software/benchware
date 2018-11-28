@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Install CentOS/RHEL
-# yum install lshw util-linux usbutils pciutils lsscsi dmidecode 
+# yum install lshw util-linux 
 # Install SLES/Suse
-# zypper in lshw util-linux usbutils pciutils lsscsi dmidecode
+# zypper in lshw util-linux 
 # Install Ubuntu
-# apt-get install lshw util-linux usbutils pciutils lsscsi dmidecode
+# apt-get install lshw util-linux 
 
 #
 # Check for required commands
 #
-COMMANDS="lshw lscpu lsblk lsusb lspci lsscsi dmidecode"
+COMMANDS="lshw lsblk"
 
 for cmd in $COMMANDS ; do
     if ! command -v $cmd >/dev/null 2>&1 ;then
@@ -26,14 +26,8 @@ done
 #
 TMPDIR=$(mktemp -d)
 pushd $TMPDIR
-lshw > lshw
-lshw -short > lshw-short
-lscpu > lscpu
-lsblk -a > lsblk-a
-lsusb -v > lsusb-v
-lspci -v > lspci-v
-lsscsi > lsscsi
-dmidecode > dmidecode
+lshw -xml > lshw-xml
+lsblk -a -P > lsblk-a-P
 popd
 
 #

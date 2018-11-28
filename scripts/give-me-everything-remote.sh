@@ -3,17 +3,17 @@
 NODE=$1
 
 # Install CentOS/RHEL
-# yum install lshw util-linux usbutils pciutils lsscsi dmidecode 
+# yum install lshw util-linux 
 # Install SLES/Suse
-# zypper in lshw util-linux usbutils pciutils lsscsi dmidecode
+# zypper in lshw util-linux 
 # Install Ubuntu
-# apt-get install lshw util-linux usbutils pciutils lsscsi dmidecode
+# apt-get install lshw util-linux 
 
 #
 # Check for required commands
 #
 ssh $NODE '
-COMMANDS="lshw lscpu lsblk lsusb lspci lsscsi dmidecode"
+COMMANDS="lshw lscpu" 
 for cmd in $COMMANDS ; do
     if ! command -v $cmd >/dev/null 2>&1 ;then
         echo "Command $cmd not found, ensure it is installed for program to continue"
@@ -28,14 +28,8 @@ done'
 #
 TMPDIR=$(mktemp -d)
 pushd $TMPDIR
-ssh $NODE "lshw" > lshw
-ssh $NODE "lshw -short" > lshw-short
-ssh $NODE "lscpu" > lscpu
-ssh $NODE "lsblk -a" > lsblk-a
-ssh $NODE "lsusb -v" > lsusb-v
-ssh $NODE "lspci -v" > lspci-v
-ssh $NODE "lsscsi" > lsscsi
-ssh $NODE "dmidecode" > dmidecode
+ssh $NODE "lshw -xml" > lshw-xml
+ssh $NODE "lsblk -a -P" > lsblk-a-P
 popd
 
 #
