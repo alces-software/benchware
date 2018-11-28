@@ -13,7 +13,7 @@ NODE=$1
 # Check for required commands
 #
 ssh $NODE '
-COMMANDS="lshw lscpu" 
+COMMANDS="lshw lsblk" 
 for cmd in $COMMANDS ; do
     if ! command -v $cmd >/dev/null 2>&1 ;then
         echo "Command $cmd not found, ensure it is installed for program to continue"
@@ -21,7 +21,17 @@ for cmd in $COMMANDS ; do
         echo "Exiting..."
         exit 1
     fi
-done'
+done
+'
+
+OPTIONAL_CMDS=$(ssh $NODE '
+CMDS="lscpu lsusb lspci lsscsi dmidecode"
+for cmd in $CMDS ; do
+    if command -v $cmd >/dev/null 2>&1 ; then
+        echo -n "$cmd "
+    fi
+done
+')
 
 #
 # Collect data
@@ -30,6 +40,12 @@ TMPDIR=$(mktemp -d)
 pushd $TMPDIR
 ssh $NODE "lshw -xml" > lshw-xml
 ssh $NODE "lsblk -a -P" > lsblk-a-P
+ssh $NODE "lshw -short" > lshw-short
+if [[ $OPTIONAL_CMDS == *"lscpu"* ]] ; then ssh $NODE "lscpu" > lscpu ; fi
+if [[ $OPTIONAL_CMDS == *"lsusb"* ]] ; then ssh $NODE "lsusb -v" > lsusb-v ; fi
+if [[ $OPTIONAL_CMDS == *"lspci"* ]] ; then ssh $NODE "lspci -v" > lspci-v ; fi
+if [[ $OPTIONAL_CMDS == *"lsscsi"* ]] ; then ssh $NODE "lsscsi" > lsscsi ; fi
+if [[ $OPTIONAL_CMDS == *"dmidecode"* ]] ; then ssh $NODE "dmidecode" > dmidecode ; fi
 popd
 
 #

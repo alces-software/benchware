@@ -21,6 +21,14 @@ for cmd in $COMMANDS ; do
     fi
 done
 
+OPTIONAL_CMDS=$(
+CMDS="lscpu lsusb lspci lsscsi dmidecode"
+for cmd in $CMDS ; do
+    if command -v $cmd >/dev/null 2>&1 ; then
+        echo -n "$cmd "
+    fi
+done)
+
 #
 # Collect data
 #
@@ -28,6 +36,12 @@ TMPDIR=$(mktemp -d)
 pushd $TMPDIR
 lshw -xml > lshw-xml
 lsblk -a -P > lsblk-a-P
+lshw -short > lshw-short
+if [[ $OPTIONAL_CMDS == *"lscpu"* ]] ; then lscpu > lscpu ; fi
+if [[ $OPTIONAL_CMDS == *"lsusb"* ]] ; then lsusb -v > lsusb-v ; fi
+if [[ $OPTIONAL_CMDS == *"lspci"* ]] ; then lspci -v > lspci-v ; fi
+if [[ $OPTIONAL_CMDS == *"lsscsi"* ]] ; then lsscsi > lsscsi ; fi
+if [[ $OPTIONAL_CMDS == *"dmidecode"* ]] ; then dmidecode > dmidecode ; fi
 popd
 
 #
